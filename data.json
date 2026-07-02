@@ -14,16 +14,6 @@
       "criadoEm": "2026-05-30T02:40:24.000Z"
     },
     {
-      "id": "p4",
-      "nome": "Naninha Estrela",
-      "descricao": "Companheira aveludada para um sono tranquilo.",
-      "preco": 68,
-      "categoria": "Crochê",
-      "imagem": "images/p4-naninha-estrela.jpg",
-      "destaque": false,
-      "criadoEm": "2026-05-30T02:40:24.000Z"
-    },
-    {
       "id": "p7",
       "nome": "Amiguri LU e DRESA",
       "descricao": "",
@@ -50,16 +40,6 @@
       "preco": 170,
       "categoria": "Crochê",
       "imagem": "images/p9-kit-lua-croche.jpg",
-      "destaque": false,
-      "criadoEm": "2026-05-30T02:40:24.000Z"
-    },
-    {
-      "id": "p10",
-      "nome": "Gelokoso Crochê",
-      "descricao": "Leão de apertar",
-      "preco": 36,
-      "categoria": "Crochê",
-      "imagem": null,
       "destaque": false,
       "criadoEm": "2026-05-30T02:40:24.000Z"
     },
@@ -104,5 +84,5 @@
       "criadoEm": "2026-05-30T02:40:24.000Z"
     }
   ],
-  "updatedAt": "2026-07-02T19:26:53.320Z"
+  "updatedAt": "2026-07-02T20:40:06.982Z"
 }

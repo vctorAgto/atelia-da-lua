@@ -125,11 +125,13 @@ function renderGrid(){
     const precoHTML = p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '<span></span>';
     const destaqueHTML = p.destaque ? '<span class="badge-destaque">✨</span>' : '';
     const whatsappHref = whatsappNumero ? linkWhatsappProduto(whatsappNumero, p) : '#';
+    const descricaoHTML = p.descricao ? `<p class="descricao">${p.descricao}</p>` : '';
     return `<div class="card">
       ${destaqueHTML}
       ${thumbHTML}
       ${p.categoria ? `<span class="cat-tag">${p.categoria}</span>` : ''}
       <p class="title">${p.nome}</p>
+      ${descricaoHTML}
       <div class="card-footer">
         ${precoHTML}
         <a class="whatsapp-pill" href="${whatsappHref}" target="_blank" rel="noopener noreferrer" aria-label="Pedir no WhatsApp">

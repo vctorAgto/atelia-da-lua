@@ -87,6 +87,8 @@ input[type=file]{border:none;padding:6px 0;}
   transition:.15s;font-family:inherit;box-shadow:var(--shadow);
 }
 .btnline:hover:not(:disabled){border-color:var(--accent);color:var(--accent-dark);box-shadow:var(--shadow-hover);transform:translateY(-1px);}
+.btnline:active:not(:disabled){transform:scale(.97);}
+.btnline.whatsapp:active:not(:disabled){filter:brightness(.9);}
 .btnline.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
 .btnline.primary:hover:not(:disabled){background:var(--accent-dark);border-color:var(--accent-dark);color:#fff;}
 .btnline.whatsapp{background:var(--whatsapp);border-color:var(--whatsapp);color:#fff;}
@@ -132,6 +134,7 @@ input[type=file]{border:none;padding:6px 0;}
   transition:box-shadow .15s, transform .15s;
 }
 .card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px);}
+.thumb-zoomable:active{opacity:.85;}
 .card .editbtn{
   position:absolute;top:10px;right:12px;border:none;background:rgba(255,255,255,.85);color:var(--ink-soft);
   font-size:.68rem;cursor:pointer;padding:5px 9px;border-radius:20px;font-family:inherit;font-weight:600;
@@ -181,6 +184,7 @@ footer{text-align:center;color:var(--ink-soft);font-size:.76rem;margin-top:56px;
   box-shadow:var(--shadow-hover);text-decoration:none;transition:transform .15s;
 }
 .fab-whatsapp:hover{transform:scale(1.06);}
+.fab-whatsapp:active{transform:scale(.94);}
 
 @media (max-width:820px){
   .settings-grid,.login-fields{grid-template-columns:1fr;}

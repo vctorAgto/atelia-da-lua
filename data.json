@@ -2,6 +2,18 @@
   "config": {
     "whatsappNumero": ""
   },
-  "produtos": [],
-  "updatedAt": null
+  "produtos": [
+    { "id": "p1", "nome": "Ursinho de Ninar Bebê", "descricao": "Bebe para voce", "preco": 87.8, "categoria": "Crochê", "imagem": "images/p1-ursinho.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p2", "nome": "Manta Nuvem", "descricao": "Tecida em ponto relevo com toque de seda.", "preco": 195, "categoria": "Crochê", "imagem": "images/p2-manta-nuvem.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p4", "nome": "Naninha Estrela", "descricao": "Companheira aveludada para um sono tranquilo.", "preco": 68, "categoria": "Crochê", "imagem": "images/p4-naninha-estrela.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p7", "nome": "Amiguri LU e DRESA", "descricao": "", "preco": 34, "categoria": "Crochê", "imagem": "images/p7-amiguri-lu-dresa.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p8", "nome": "Kit Estrela Tapete", "descricao": "Feito com linhos retirados do monte guine com todo carinho.", "preco": 234.34, "categoria": "Crochê", "imagem": "images/p8-kit-estrela-tapete.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p9", "nome": "Kit LUA Crochê", "descricao": "Feito sob medida", "preco": 170, "categoria": "Crochê", "imagem": "images/p9-kit-lua-croche.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p10", "nome": "Gelokoso Crochê", "descricao": "Leão de apertar", "preco": 36, "categoria": "Crochê", "imagem": null, "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p11", "nome": "Manga Crochê Mingua", "descricao": "manga para quem está com frio quentinho", "preco": 70, "categoria": "Crochê", "imagem": "images/p11-manga-croche.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p12", "nome": "Kit Porta Copo Crochê", "descricao": "Kit feito com muito carinho", "preco": 500, "categoria": "Crochê", "imagem": "images/p12-porta-copo.jpg", "destaque": false, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p13", "nome": "Guirlanda Encanto em Crochê", "descricao": "Guirlanda de crochê feita à mão. Peça artesanal.", "preco": 59.9, "categoria": "Decoração", "imagem": "images/p13-guirlanda.jpg", "destaque": true, "criadoEm": "2026-05-30T02:40:24.000Z" },
+    { "id": "p14", "nome": "Kit Maternidade Crochê", "descricao": "Kit maternidade em crochê artesanal, feito à mão com muito carinho.", "preco": 250, "categoria": "Crochê", "imagem": "images/p14-kit-maternidade.jpg", "destaque": true, "criadoEm": "2026-05-30T02:40:24.000Z" }
+  ],
+  "updatedAt": "2026-07-02T14:55:00.000Z"
 }

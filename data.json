@@ -15,11 +15,11 @@
     },
     {
       "id": "p7",
-      "nome": "Amiguri LU e DRESA",
-      "descricao": "",
-      "preco": 34,
+      "nome": "Chaveiro de Flor em Fio de Malha",
+      "descricao": "Chaveiro de Flor em Fio de Malha 🌼🧶\n\nPeça artesanal delicada e exclusiva, confeccionada em fio de malha de alta qualidade, perfeita para dar um toque especial às suas chaves, bolsas ou para presentear alguém querido.\n\n✨ Detalhes do produto:\n\nProduzido manualmente com fio de malha.\n\nFormato de flor com acabamento sofisticado.\n\nAplicação de detalhe decorativo no centro da peça.\n\nArgola metálica resistente.\n\nLeve, durável e fácil de transportar.\n\nDisponível em diversas cores sob encomenda.\n\n\n🎁 Ideal para:\n\nLembrancinhas de aniversário e eventos.\n\nPresentes artesanais e personalizados.\n\nDecoração de bolsas e mochilas.\n\nBrindes especiais para clientes e amigos.\n\n\n💝 Produto 100% artesanal, feito com carinho e atenção a cada detalhe. Por ser confeccionado à mão, cada peça possui características únicas que a tornam ainda mais especial.",
+      "preco": 5,
       "categoria": "Crochê",
-      "imagem": "images/p7-amiguri-lu-dresa.jpg",
+      "imagem": "images/b225929d-b256-4713-83c0-51e22da8beea.jpg",
       "destaque": false,
       "criadoEm": "2026-05-30T02:40:24.000Z"
     },
@@ -84,5 +84,5 @@
       "criadoEm": "2026-05-30T02:40:24.000Z"
     }
   ],
-  "updatedAt": "2026-07-02T22:11:55.581Z"
+  "updatedAt": "2026-07-02T22:30:21.849Z"
 }

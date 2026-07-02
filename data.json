@@ -5,11 +5,11 @@
   "produtos": [
     {
       "id": "p1",
-      "nome": "Ursinho de Ninar Bebê",
-      "descricao": "Bebe para voce",
-      "preco": 87.8,
+      "nome": "Porta Maternidade",
+      "descricao": "Porta Maternidade Personalizado em Crochê 🌸👶\n\nUma peça única e delicada, feita à mão para tornar a chegada do seu bebê ainda mais especial. Personalizado com o nome da criança e detalhes florais encantadores.\n\n✨ Detalhes do produto:\n\nConfeccionado artesanalmente em crochê.\n\nProduzido com fio Amigurumi Círculo de alta qualidade.\n\nNome personalizado com acabamento delicado e elegante.\n\nFlores aplicadas com detalhes em pérolas e folhas em crochê.\n\nEstrutura leve e resistente, pronta para pendurar.\n\nDecoração exclusiva para quarto de bebê e maternidade.\n\n\n🎀 Ideal para:\n\nEnfeitar a porta da maternidade.\n\nDecorar o quartinho do bebê.\n\nPresentear futuras mamães.\n\nEnsaios fotográficos e chá de bebê.\n\nGuardar como lembrança especial para toda a vida.\n\n\n💝 Produto 100% artesanal, confeccionado com muito amor e atenção aos detalhes. Cada peça é única e pode ser personalizada com nome, cores e tema de sua preferência.\n\n📏 Personalização disponível: escolha o nome, as cores e os detalhes que mais combinam com o seu sonho. 🌷👶✨",
+      "preco": 100,
       "categoria": "Crochê",
-      "imagem": "images/p1-ursinho.jpg",
+      "imagem": "images/6980d8d1-a725-4903-8749-519db7363d4a.jpg",
       "destaque": false,
       "criadoEm": "2026-05-30T02:40:24.000Z"
     },
@@ -84,5 +84,5 @@
       "criadoEm": "2026-05-30T02:40:24.000Z"
     }
   ],
-  "updatedAt": "2026-07-02T20:40:06.982Z"
+  "updatedAt": "2026-07-02T22:11:55.581Z"
 }

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel — Ateliê da Lua</title>
+<link rel="icon" type="image/jpg" href="favicon-lua.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <img src="logo.png" alt="Ateliê da Lua" class="brandmark">
+    <p class="eyebrow"><span>Ateliê da Lua · Painel</span><a class="badge-link" href="index.html">Ver vitrine →</a></p>
+    <h1>Painel do ateliê</h1>
+    <p class="sub">As alterações aqui gravam um commit direto no repositório GitHub — a vitrine reflete as mudanças assim que o GitHub Pages publicar (geralmente ~1 minuto).</p>
+  </div>
+
+  <!-- Tela de login: nada do painel aparece antes de entrar -->
+  <div class="login-gate" id="loginGate">
+    <h2>Entrar no painel</h2>
+    <p class="sub">Use o nome que quiser e a senha de acesso do ateliê.</p>
+    <div class="login-fields">
+      <div>
+        <label>Seu nome</label>
+        <input type="text" id="cfgName" placeholder="ex: Ana">
+      </div>
+      <div>
+        <label>Senha de acesso</label>
+        <input type="password" id="cfgToken" placeholder="senha compartilhada do painel">
+      </div>
+    </div>
+    <div class="newitem-error" id="loginError"></div>
+    <div class="row" style="margin-top:14px;justify-content:center;">
+      <button class="btnline primary" id="btnLogin">Entrar</button>
+    </div>
+    <details class="advanced">
+      <summary>Configuração avançada (só para quem administra o repositório)</summary>
+      <div class="settings-grid">
+        <div>
+          <label>Usuário/organização do GitHub</label>
+          <input type="text" id="cfgOwner" placeholder="vctorAgto">
+        </div>
+        <div>
+          <label>Nome do repositório</label>
+          <input type="text" id="cfgRepo" placeholder="atelia-da-lua">
+        </div>
+        <div>
+          <label>Branch</label>
+          <input type="text" id="cfgBranch" placeholder="main">
+        </div>
+        <div>
+          <label>Caminho do arquivo de dados</label>
+          <input type="text" id="cfgPath" placeholder="data.json">
+        </div>
+      </div>
+      <div class="settings-note">
+        Deixe em branco pra usar os valores padrão deste repositório. A "senha de acesso" é, por baixo dos
+        panos, um token do GitHub (fine-grained, permissão só de "Contents: Read and write" neste repositório).
+        Não compartilhe essa senha fora de quem cuida do ateliê.
+      </div>
+    </details>
+  </div>
+
+  <!-- Conteúdo do painel: só aparece depois de entrar com sucesso -->
+  <div id="appView" hidden>
+    <div class="statusbar" id="statusbar"></div>
+
+    <div class="row" style="justify-content:flex-end;margin-bottom:4px;">
+      <button class="btnline small" id="btnLogout">Sair</button>
+    </div>
+
+    <div class="newitem-panel">
+      <h3>Configurações da vitrine</h3>
+      <div class="newitem-grid">
+        <div class="settings-full">
+          <label>Número do WhatsApp que recebe os pedidos</label>
+          <input type="text" id="cfgWhatsapp" placeholder="Ex: 5542999039243 (código do país + DDD + número, só dígitos)">
+        </div>
+      </div>
+    </div>
+
+    <div class="searchrow">
+      <input type="text" id="search" placeholder="Buscar produto por nome…">
+    </div>
+
+    <div class="drawers" id="drawers"></div>
+
+    <div class="bulkrow">
+      <h2 id="sectionTitle">Todos os produtos</h2>
+      <div class="bulkrow-actions">
+        <button class="btnline" id="btnNewItem">+ Novo produto</button>
+        <button class="btnline" id="btnLoad">Recarregar do GitHub</button>
+        <button class="btnline primary" id="btnSave" disabled>Salvar no GitHub</button>
+      </div>
+    </div>
+
+    <div class="newitem-panel" id="newItemPanel" hidden>
+      <h3 id="niHeading">Adicionar novo produto</h3>
+      <div class="newitem-grid">
+        <div>
+          <label>Nome<span class="req">obrigatório</span></label>
+          <input type="text" id="niNome" placeholder="ex: Chaveiro de crochê lua">
+        </div>
+        <div>
+          <label>Categoria</label>
+          <select id="niCat"></select>
+        </div>
+        <div>
+          <label>Preço (R$)</label>
+          <input type="number" id="niPreco" min="0" step="0.01" placeholder="0.00">
+        </div>
+        <div>
+          <label style="margin-top:26px;">
+            <input type="checkbox" id="niDestaque" style="width:auto;display:inline-block;margin-right:6px;">
+            Marcar como destaque ✨
+          </label>
+        </div>
+        <div class="settings-full">
+          <label>Descrição</label>
+          <textarea id="niDescricao" rows="2" placeholder="Detalhes do produto (opcional)"></textarea>
+        </div>
+        <div class="settings-full">
+          <label>Foto do produto</label>
+          <div class="preview-wrap">
+            <div id="niPreviewWrap"><div class="preview-empty">🌙</div></div>
+            <input type="file" id="niImagem" accept="image/*">
+          </div>
+        </div>
+      </div>
+      <div class="newitem-error" id="niError"></div>
+      <div class="row" style="margin-top:12px;justify-content:space-between;">
+        <button class="btnline danger" id="btnNewItemRemove" hidden>Remover produto</button>
+        <div class="row" style="margin-left:auto;">
+          <button class="btnline" id="btnNewItemCancel">Cancelar</button>
+          <button class="btnline primary" id="btnNewItemConfirm">Adicionar produto</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <footer>Alterações são gravadas como commits no GitHub · Ateliê da Lua</footer>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle">Confirmar</h3>
+    <p id="modalMessage"></p>
+    <div class="row" style="justify-content:flex-end;margin-top:18px;">
+      <button class="btnline" id="modalCancel">Cancelar</button>
+      <button class="btnline primary" id="modalConfirm">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+const DEFAULTS = { owner: 'vctorAgto', repo: 'atelia-da-lua', branch: 'main', path: 'data.json' };
+
+let produtos = [];
+let config = { whatsappNumero: '' };
+let currentSha = null;
+let dirty = false;
+let activeCategory = null;
+let searchTerm = '';
+let editingIndex = null;
+let pendingImageFile = null;
+let pendingImageRemoved = false;
+
+const els = {
+  loginGate: document.getElementById('loginGate'),
+  appView: document.getElementById('appView'),
+  loginError: document.getElementById('loginError'),
+  btnLogin: document.getElementById('btnLogin'),
+  btnLogout: document.getElementById('btnLogout'),
+  name: document.getElementById('cfgName'),
+  owner: document.getElementById('cfgOwner'),
+  repo: document.getElementById('cfgRepo'),
+  branch: document.getElementById('cfgBranch'),
+  path: document.getElementById('cfgPath'),
+  token: document.getElementById('cfgToken'),
+  whatsapp: document.getElementById('cfgWhatsapp'),
+  statusbar: document.getElementById('statusbar'),
+  drawers: document.getElementById('drawers'),
+  grid: document.getElementById('grid'),
+  sectionTitle: document.getElementById('sectionTitle'),
+  btnSave: document.getElementById('btnSave'),
+  btnLoad: document.getElementById('btnLoad'),
+  search: document.getElementById('search'),
+  btnNewItem: document.getElementById('btnNewItem'),
+  toast: document.getElementById('toast'),
+  modalOverlay: document.getElementById('modalOverlay'),
+  modalTitle: document.getElementById('modalTitle'),
+  modalMessage: document.getElementById('modalMessage'),
+  modalCancel: document.getElementById('modalCancel'),
+  modalConfirm: document.getElementById('modalConfirm'),
+  newItemPanel: document.getElementById('newItemPanel'),
+  niHeading: document.getElementById('niHeading'),
+  niNome: document.getElementById('niNome'),
+  niDescricao: document.getElementById('niDescricao'),
+  niCat: document.getElementById('niCat'),
+  niPreco: document.getElementById('niPreco'),
+  niDestaque: document.getElementById('niDestaque'),
+  niImagem: document.getElementById('niImagem'),
+  niPreviewWrap: document.getElementById('niPreviewWrap'),
+  niError: document.getElementById('niError'),
+  btnNewItemCancel: document.getElementById('btnNewItemCancel'),
+  btnNewItemConfirm: document.getElementById('btnNewItemConfirm'),
+  btnNewItemRemove: document.getElementById('btnNewItemRemove')
+};
+
+function loadLoginFields(){
+  const cfg = JSON.parse(localStorage.getItem('atelia-github-config') || '{}');
+  els.name.value = cfg.name || '';
+  els.owner.value = cfg.owner || '';
+  els.repo.value = cfg.repo || '';
+  els.branch.value = cfg.branch || '';
+  els.path.value = cfg.path || '';
+  els.token.value = cfg.token || '';
+  return cfg;
+}
+function saveLoginFields(){
+  const cfg = {
+    name: els.name.value.trim(),
+    owner: els.owner.value.trim(),
+    repo: els.repo.value.trim(),
+    branch: els.branch.value.trim(),
+    path: els.path.value.trim(),
+    token: els.token.value.trim()
+  };
+  localStorage.setItem('atelia-github-config', JSON.stringify(cfg));
+  return cfg;
+}
+function getConfig(){
+  const cfg = JSON.parse(localStorage.getItem('atelia-github-config') || '{}');
+  return {
+    name: cfg.name || '',
+    owner: cfg.owner || DEFAULTS.owner,
+    repo: cfg.repo || DEFAULTS.repo,
+    branch: cfg.branch || DEFAULTS.branch,
+    path: cfg.path || DEFAULTS.path,
+    token: cfg.token || ''
+  };
+}
+
+function contentsUrl(cfg, path){
+  return `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
+}
+
+function setStatus(msg, isError){
+  els.statusbar.textContent = msg;
+  els.statusbar.classList.toggle('error', !!isError);
+}
+
+let toastTimer = null;
+function showToast(msg, isError){
+  clearTimeout(toastTimer);
+  els.toast.textContent = msg;
+  els.toast.hidden = false;
+  els.toast.classList.toggle('error', !!isError);
+  requestAnimationFrame(() => els.toast.classList.add('show'));
+  toastTimer = setTimeout(() => {
+    els.toast.classList.remove('show');
+    setTimeout(() => { els.toast.hidden = true; }, 250);
+  }, 4000);
+}
+
+function showConfirm(message, opts){
+  opts = opts || {};
+  return new Promise((resolve) => {
+    els.modalTitle.textContent = opts.title || 'Confirmar';
+    els.modalMessage.textContent = message;
+    els.modalConfirm.textContent = opts.confirmLabel || 'Confirmar';
+    els.modalConfirm.classList.toggle('danger', !!opts.danger);
+    els.modalConfirm.classList.toggle('primary', !opts.danger);
+    els.modalOverlay.hidden = false;
+    requestAnimationFrame(() => els.modalOverlay.classList.add('show'));
+    function cleanup(result){
+      els.modalOverlay.classList.remove('show');
+      setTimeout(() => { els.modalOverlay.hidden = true; }, 150);
+      els.modalConfirm.removeEventListener('click', onConfirm);
+      els.modalCancel.removeEventListener('click', onCancel);
+      els.modalOverlay.removeEventListener('click', onBackdrop);
+      resolve(result);
+    }
+    function onConfirm(){ cleanup(true); }
+    function onCancel(){ cleanup(false); }
+    function onBackdrop(e){ if(e.target === els.modalOverlay) cleanup(false); }
+    els.modalConfirm.addEventListener('click', onConfirm);
+    els.modalCancel.addEventListener('click', onCancel);
+    els.modalOverlay.addEventListener('click', onBackdrop);
+  });
+}
+
+function showApp(){ els.loginGate.hidden = true; els.appView.hidden = false; }
+function showGate(msg, isError){
+  els.appView.hidden = true;
+  els.loginGate.hidden = false;
+  els.loginError.textContent = msg || '';
+  els.loginError.classList.toggle('error', !!isError);
+}
+
+async function loadFromGitHub(){
+  const cfg = getConfig();
+  if(!cfg.token){ showGate('Preencha a senha de acesso para entrar.', true); return false; }
+  setStatus('Carregando do GitHub...');
+  try{
+    const res = await fetch(`${contentsUrl(cfg, cfg.path)}?ref=${encodeURIComponent(cfg.branch)}`, {
+      headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github+json' }
+    });
+    if(!res.ok){
+      const body = await res.text();
+      throw new Error(`HTTP ${res.status} — ${body.slice(0,200)}`);
+    }
+    const json = await res.json();
+    currentSha = json.sha;
+    const decoded = base64ToUtf8(json.content.replace(/\n/g, ''));
+    const payload = JSON.parse(decoded);
+    produtos = payload.produtos || [];
+    config = payload.config || { whatsappNumero: '' };
+    els.whatsapp.value = config.whatsappNumero || '';
+    dirty = false;
+    els.btnSave.disabled = true;
+    showApp();
+    setStatus('Carregado do GitHub. Última atualização: ' + formatDateTime(payload.updatedAt));
+    render();
+    return true;
+  }catch(e){
+    showGate('Não foi possível entrar: ' + e.message, true);
+    return false;
+  }
+}
+
+async function fetchLatestSha(cfg, path){
+  const res = await fetch(`${contentsUrl(cfg, path)}?ref=${encodeURIComponent(cfg.branch)}`, {
+    headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github+json' }
+  });
+  if(!res.ok) return null;
+  const json = await res.json();
+  return json.sha;
+}
+
+async function putFile(cfg, path, base64Content, message, sha){
+  const body = { message, content: base64Content, branch: cfg.branch };
+  if(sha) body.sha = sha;
+  const res = await fetch(contentsUrl(cfg, path), {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${cfg.token}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    const errBody = await res.text();
+    throw new Error(`HTTP ${res.status} — ${errBody.slice(0,200)}`);
+  }
+  return res.json();
+}
+
+async function deleteFile(cfg, path, message){
+  try{
+    const sha = await fetchLatestSha(cfg, path);
+    if(!sha) return;
+    await fetch(contentsUrl(cfg, path), {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${cfg.token}`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message, sha, branch: cfg.branch })
+    });
+  }catch{
+    // imagem orfã não é grave — ignora falha de limpeza
+  }
+}
+
+async function uploadImage(cfg, file){
+  const base64 = await resizeImageToJpegBase64(file);
+  const nome = `images/${crypto.randomUUID()}.jpg`;
+  const quem = cfg.name || 'Painel';
+  await putFile(cfg, nome, base64, `Adiciona foto de produto — ${quem}`);
+  return nome;
+}
+
+async function saveToGitHub(){
+  const cfg = getConfig();
+  if(!cfg.token){ showGate('Preencha a senha de acesso.', true); return; }
+  setStatus('Salvando no GitHub...');
+  els.btnSave.disabled = true;
+  const originalLabel = els.btnSave.textContent;
+  els.btnSave.textContent = 'Salvando...';
+  const payload = { config, produtos, updatedAt: new Date().toISOString() };
+  const content = utf8ToBase64(JSON.stringify(payload, null, 2));
+  const quem = cfg.name || 'Painel';
+  const message = `Atualiza vitrine — ${quem} — ` + new Date().toLocaleString('pt-BR');
+  let resolvedConflict = false;
+  try{
+    let json;
+    try{
+      json = await putFile(cfg, cfg.path, content, message, currentSha);
+    }catch(e){
+      if(!String(e.message).startsWith('HTTP 409')) throw e;
+      setStatus('Outra pessoa salvou enquanto você editava — sincronizando automaticamente...');
+      const freshSha = await fetchLatestSha(cfg, cfg.path);
+      json = await putFile(cfg, cfg.path, content, message, freshSha);
+      resolvedConflict = true;
+    }
+    currentSha = json.content.sha;
+    dirty = false;
+    setStatus(resolvedConflict
+      ? 'Conflito resolvido automaticamente — suas alterações foram salvas por cima.'
+      : 'Salvo no GitHub às ' + new Date().toLocaleTimeString('pt-BR') + '. A vitrine atualiza em ~1 minuto.');
+    showToast('✓ Vitrine salva no GitHub com sucesso.');
+    els.btnSave.textContent = 'Salvo ✓';
+    setTimeout(() => { els.btnSave.textContent = originalLabel; }, 2500);
+  }catch(e){
+    setStatus('Falha ao salvar: ' + e.message + ' — nada foi perdido, tente salvar de novo.', true);
+    showToast('Falha ao salvar: ' + e.message, true);
+    els.btnSave.textContent = originalLabel;
+    els.btnSave.disabled = false;
+  }
+}
+
+function markDirty(){
+  dirty = true;
+  els.btnSave.disabled = false;
+  setStatus('Alterações não salvas — clique em "Salvar no GitHub" para gravar.');
+}
+
+els.whatsapp.addEventListener('input', () => {
+  config.whatsappNumero = els.whatsapp.value.trim();
+  markDirty();
+});
+
+function renderDrawers(){
+  const categoriasComItens = CATEGORIES.filter(cat => produtos.some(p => p.categoria === cat));
+  if(categoriasComItens.length < 2){ els.drawers.innerHTML = ''; return; }
+  const todosHTML = `<div class="drawer ${!activeCategory && !searchTerm ? 'active' : ''}" data-cat="" style="--cat-color:var(--outros);--cat-bg:var(--outros-bg);">
+    <span class="icon">✨</span><span class="name">Todos</span><span class="count">${produtos.length}</span>
+  </div>`;
+  const catsHTML = categoriasComItens.map(cat => {
+    const key = CAT_KEY[cat];
+    const count = produtos.filter(p => p.categoria === cat).length;
+    const active = (!searchTerm && activeCategory === cat) ? 'active' : '';
+    return `<div class="drawer ${active}" data-cat="${cat}" style="--cat-color:var(--${key});--cat-bg:var(--${key}-bg);">
+      <span class="icon">${ICONS[cat]}</span><span class="name">${cat}</span><span class="count">${count}</span>
+    </div>`;
+  }).join('');
+  els.drawers.innerHTML = todosHTML + catsHTML;
+  els.drawers.querySelectorAll('.drawer').forEach(el => {
+    el.addEventListener('click', () => {
+      activeCategory = el.dataset.cat || null;
+      searchTerm = '';
+      els.search.value = '';
+      render();
+    });
+  });
+}
+
+function visibleProdutos(){
+  let list = produtos;
+  if(searchTerm){
+    const t = searchTerm.toLowerCase();
+    list = list.filter(p => p.nome.toLowerCase().includes(t));
+  } else if(activeCategory){
+    list = list.filter(p => p.categoria === activeCategory);
+  }
+  return list;
+}
+
+function renderGrid(){
+  const list = visibleProdutos();
+  els.sectionTitle.textContent = searchTerm ? `Resultados para "${searchTerm}"` : (activeCategory || 'Todos os produtos');
+
+  if(!list.length){
+    els.grid.innerHTML = produtos.length
+      ? '<div class="empty"><div class="big">🎨</div>Nenhum produto encontrado com esse filtro.</div>'
+      : '<div class="empty"><div class="big">🌙</div>Nenhum produto cadastrado ainda. Clique em "+ Novo produto".</div>';
+    return;
+  }
+
+  els.grid.innerHTML = list.map((p) => {
+    const idx = produtos.indexOf(p);
+    const key = CAT_KEY[p.categoria] || 'outros';
+    const thumbHTML = p.imagem
+      ? `<img class="thumb" src="${p.imagem}" alt="${p.nome}" loading="lazy">`
+      : `<div class="thumb-empty">🌙</div>`;
+    const precoHTML = p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '';
+    const destaqueHTML = p.destaque ? '<span class="badge-destaque">✨ Destaque</span>' : '';
+    return `<div class="card" style="--cat-color:var(--${key});--cat-bg:var(--${key}-bg);">
+      <button class="editbtn" data-idx="${idx}">Editar</button>
+      ${destaqueHTML}
+      ${thumbHTML}
+      ${p.categoria ? `<span class="cat-tag">${p.categoria}</span>` : ''}
+      <p class="title">${p.nome}</p>
+      ${precoHTML}
+    </div>`;
+  }).join('');
+
+  els.grid.querySelectorAll('.editbtn').forEach(b => b.addEventListener('click', () => openEditPanel(Number(b.dataset.idx))));
+}
+
+function render(){ renderDrawers(); renderGrid(); }
+
+els.search.addEventListener('input', (e) => { searchTerm = e.target.value.trim(); render(); });
+
+els.btnLoad.addEventListener('click', loadFromGitHub);
+els.btnSave.addEventListener('click', saveToGitHub);
+
+els.btnLogin.addEventListener('click', async () => {
+  if(!els.token.value.trim()){ showGate('Preencha a senha de acesso.', true); return; }
+  saveLoginFields();
+  els.btnLogin.disabled = true;
+  await loadFromGitHub();
+  els.btnLogin.disabled = false;
+});
+
+els.btnLogout.addEventListener('click', async () => {
+  if(dirty){
+    const ok = await showConfirm('Existem alterações não salvas. Sair mesmo assim?', { title: 'Sair sem salvar?', confirmLabel: 'Sair', danger: true });
+    if(!ok) return;
+  }
+  localStorage.removeItem('atelia-github-config');
+  els.token.value = '';
+  produtos = [];
+  dirty = false;
+  showGate('Você saiu. Entre novamente com a senha de acesso.');
+});
+
+// --- Painel de produto: adicionar novo ou editar existente ---
+els.niCat.innerHTML = CATEGORIES.map(c => `<option>${c}</option>`).join('');
+
+function resetImagePicker(imagemAtual){
+  pendingImageFile = null;
+  pendingImageRemoved = false;
+  els.niImagem.value = '';
+  els.niPreviewWrap.innerHTML = imagemAtual
+    ? `<img class="preview-img" src="${imagemAtual}" alt="Prévia">`
+    : `<div class="preview-empty">🌙</div>`;
+}
+
+function openNewItemPanel(){
+  editingIndex = null;
+  els.niHeading.textContent = 'Adicionar novo produto';
+  els.btnNewItemConfirm.textContent = 'Adicionar produto';
+  els.btnNewItemRemove.hidden = true;
+  els.newItemPanel.hidden = false;
+  els.niNome.value = '';
+  els.niDescricao.value = '';
+  els.niCat.value = activeCategory || CATEGORIES[0];
+  els.niPreco.value = '';
+  els.niDestaque.checked = false;
+  els.niError.textContent = '';
+  resetImagePicker(null);
+  els.newItemPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  els.niNome.focus();
+}
+
+function openEditPanel(idx){
+  editingIndex = idx;
+  const p = produtos[idx];
+  els.niHeading.textContent = 'Editar produto';
+  els.btnNewItemConfirm.textContent = 'Salvar alterações';
+  els.btnNewItemRemove.hidden = false;
+  els.newItemPanel.hidden = false;
+  els.niNome.value = p.nome;
+  els.niDescricao.value = p.descricao || '';
+  els.niCat.value = p.categoria || CATEGORIES[0];
+  els.niPreco.value = p.preco || '';
+  els.niDestaque.checked = !!p.destaque;
+  els.niError.textContent = '';
+  resetImagePicker(p.imagem);
+  els.newItemPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  els.niNome.focus();
+}
+
+function closeNewItemPanel(){
+  els.newItemPanel.hidden = true;
+  els.niError.textContent = '';
+  editingIndex = null;
+  pendingImageFile = null;
+}
+els.btnNewItem.addEventListener('click', openNewItemPanel);
+els.btnNewItemCancel.addEventListener('click', closeNewItemPanel);
+
+els.niImagem.addEventListener('change', () => {
+  const file = els.niImagem.files[0];
+  if(!file) return;
+  pendingImageFile = file;
+  const reader = new FileReader();
+  reader.onload = () => {
+    els.niPreviewWrap.innerHTML = `<img class="preview-img" src="${reader.result}" alt="Prévia">`;
+  };
+  reader.readAsDataURL(file);
+});
+
+els.btnNewItemConfirm.addEventListener('click', async () => {
+  const nome = els.niNome.value.trim();
+  const descricao = els.niDescricao.value.trim();
+  const categoria = els.niCat.value;
+  const preco = Math.max(0, parseFloat(els.niPreco.value) || 0);
+  const destaque = els.niDestaque.checked;
+
+  if(!nome){
+    els.niError.textContent = 'O nome é obrigatório.';
+    els.niNome.focus();
+    return;
+  }
+
+  const cfg = getConfig();
+  els.niError.textContent = '';
+  els.btnNewItemConfirm.disabled = true;
+  const originalLabel = els.btnNewItemConfirm.textContent;
+
+  try{
+    let imagem = editingIndex === null ? null : produtos[editingIndex].imagem;
+    if(pendingImageFile){
+      els.btnNewItemConfirm.textContent = 'Enviando foto...';
+      const imagemAntiga = imagem;
+      imagem = await uploadImage(cfg, pendingImageFile);
+      if(imagemAntiga) deleteFile(cfg, imagemAntiga, 'Remove foto substituída');
+    }
+
+    if(editingIndex === null){
+      produtos.push({ id: crypto.randomUUID(), nome, descricao, categoria, preco, destaque, imagem, criadoEm: new Date().toISOString() });
+    }else{
+      const p = produtos[editingIndex];
+      p.nome = nome; p.descricao = descricao; p.categoria = categoria; p.preco = preco; p.destaque = destaque; p.imagem = imagem;
+    }
+
+    activeCategory = categoria;
+    searchTerm = '';
+    els.search.value = '';
+    closeNewItemPanel();
+    render();
+    markDirty();
+  }catch(e){
+    els.niError.textContent = 'Falha ao enviar a foto: ' + e.message;
+  }finally{
+    els.btnNewItemConfirm.disabled = false;
+    els.btnNewItemConfirm.textContent = originalLabel;
+  }
+});
+
+els.btnNewItemRemove.addEventListener('click', async () => {
+  if(editingIndex === null) return;
+  const p = produtos[editingIndex];
+  const ok = await showConfirm(`Remover "${p.nome}" do catálogo?`, { title: 'Remover produto?', confirmLabel: 'Remover', danger: true });
+  if(!ok) return;
+  if(p.imagem){
+    const cfg = getConfig();
+    deleteFile(cfg, p.imagem, 'Remove foto de produto excluído');
+  }
+  produtos.splice(editingIndex, 1);
+  closeNewItemPanel();
+  render();
+  markDirty();
+});
+
+window.addEventListener('beforeunload', (e) => {
+  if(dirty){ e.preventDefault(); e.returnValue = ''; }
+});
+
+const savedCfg = loadLoginFields();
+if(savedCfg.token){
+  showGate('Entrando...');
+  loadFromGitHub();
+}else{
+  showGate();
+}
+</script>
+</body>
+</html>

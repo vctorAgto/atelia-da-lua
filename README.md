@@ -1,51 +1,60 @@
 # Ateliê da Lua — Vitrine online
 
-Site de vitrine para o Ateliê da Lua: os clientes veem os produtos e clicam para pedir direto no WhatsApp, sem cadastro. Você (admin) gerencia os produtos e fotos por um painel com usuário e senha.
+Site de vitrine hospedado de graça no GitHub Pages, sem servidor nenhum.
 
-- **Vitrine (`/`)** — pública, qualquer visitante vê e clica no WhatsApp. Sem login.
-- **Painel (`/admin`)** — protegido por login, só você acessa para cadastrar/editar/excluir produtos.
+- [index.html](index.html) — vitrine pública, só leitura. Qualquer cliente pode ver e clicar no WhatsApp. Sem cadastro, sem senha.
+- [admin.html](admin.html) — painel de edição. Só quem tem a senha de acesso consegue cadastrar/editar/remover produtos e fotos.
+- [data.json](data.json) — onde os produtos ficam guardados (é commitado no repositório).
+- [style.css](style.css) / [shared.js](shared.js) — código compartilhado entre as duas telas.
+- `images/` — fotos dos produtos, enviadas pelo próprio painel (criada automaticamente no primeiro upload).
 
-## Rodando localmente
+Repositório: https://github.com/vctorAgto/atelia-da-lua · Site: https://vctoragto.github.io/atelia-da-lua/
 
-```bash
-npm install
-npm run dev
-```
+⚠️ **Importante:** como o repositório é público (necessário pro GitHub Pages gratuito), os produtos e fotos do
+catálogo ficam **publicamente visíveis** pra qualquer um com o link — o que é natural pra vitrine de uma loja
+(são as mesmas informações que já aparecem no site).
 
-Copie `.env.example` para `.env.local` e preencha as variáveis (veja abaixo). Depois abra http://localhost:3000.
+## Publicando pela primeira vez
 
-Sem configurar o Vercel Blob, os produtos e imagens ficam salvos localmente em `./data` e `./public/uploads` — ótimo para testar antes de publicar.
+1. Se o repositório no GitHub ainda não existir, crie um vazio em github.com/new (mesmo nome, público).
+2. No terminal, dentro desta pasta: `git init && git add . && git commit -m "Vitrine inicial"`, depois
+   `git remote add origin https://github.com/vctorAgto/atelia-da-lua.git` e `git push -u origin main`.
+3. No GitHub, vá em **Settings → Pages**, selecione a branch `main` e a pasta `/ (root)`.
+4. Confirme que o repositório está público (Settings → General → Danger Zone → Change visibility) — sem isso o
+   Pages gratuito não ativa.
+5. Depois de alguns minutos o site estará em `https://vctoragto.github.io/atelia-da-lua/`.
 
-## Publicando na Vercel (deixa o site no ar)
+## Acesso do painel: nome + senha
 
-Subir o código no GitHub guarda o projeto, mas quem deixa o site acessível na internet é a hospedagem. Recomendado: **Vercel** (grátis, conecta direto no repositório).
+O painel não usa contas individuais de verdade — isso exigiria um servidor (o GitHub Pages é 100% estático e
+gratuito, sem backend). Na prática, existe **uma senha de acesso única**, compartilhada com quem for atualizar
+o catálogo. Por baixo dos panos essa senha é um token do GitHub, mas quem só vai cadastrar produtos não
+precisa saber disso — só preenche "Seu nome" (aparece no histórico de alterações) e "Senha de acesso".
 
-1. Acesse [vercel.com](https://vercel.com), entre com sua conta do GitHub.
-2. Clique em **Add New → Project** e importe o repositório `atelia-da-lua`.
-3. Antes de clicar em Deploy, vá em **Environment Variables** e adicione:
+### Criar/trocar a senha de acesso
 
-   | Nome | Valor |
-   |---|---|
-   | `NEXT_PUBLIC_WHATSAPP_NUMERO` | número completo com código do país e DDD, só números. Ex: `5542999039243` |
-   | `ADMIN_USER` | o nome de usuário que você quer usar para entrar no `/admin` |
-   | `ADMIN_PASSWORD_HASH` | gerado no passo 4 abaixo |
-   | `JWT_SECRET` | qualquer frase longa e aleatória (ex: gere em https://www.uuidgenerator.net/) |
+1. Vá em **github.com → foto de perfil → Settings → Developer settings → Personal access tokens → Fine-grained tokens**.
+2. Clique em "Generate new token".
+3. Em "Repository access", selecione **Only select repositories** e escolha só o `atelia-da-lua`.
+4. Em "Permissions → Repository permissions", defina **Contents: Read and write**. Não precisa de mais nenhuma permissão.
+5. Gere o token e copie (começa com `github_pat_...`) — essa string é a "senha de acesso" do painel.
+   Você não vê ela de novo depois, então guarde num lugar seguro.
+6. Se precisar revogar o acesso de alguém, revogue esse token (Settings → Developer settings → Fine-grained
+   tokens → Revoke) e gere um novo pra quem continuar editando.
 
-4. Para gerar o `ADMIN_PASSWORD_HASH`, rode localmente (troque `suasenha` pela senha que você quer usar):
-   ```bash
-   npm run hash-password -- suasenha
-   ```
-   Copie o texto gerado (começa com `$2b$...`) e cole em `ADMIN_PASSWORD_HASH` na Vercel.
+### Usando o painel
 
-5. Clique em **Deploy**. Depois de publicado, ainda dentro do projeto na Vercel:
-   - Vá na aba **Storage** → **Create Database** → **Blob**.
-   - Conecte esse Blob store ao projeto (isso adiciona a variável `BLOB_READ_WRITE_TOKEN` automaticamente). É onde ficam guardados os produtos e as fotos cadastradas — sem isso, cada novo deploy apagaria o catálogo.
-   - Depois de conectar o Blob, faça um **redeploy** (Deployments → menu "..." → Redeploy) para a variável entrar em vigor.
+1. Abra `https://vctoragto.github.io/atelia-da-lua/admin.html`.
+2. Preencha **Seu nome** e cole a **Senha de acesso**, clique em "Entrar".
+3. Em **Configurações da vitrine**, cole o número do WhatsApp que recebe os pedidos (código do país + DDD +
+   número, só dígitos — ex: `5542999039243`).
+4. Clique em **"+ Novo produto"**, preencha nome/preço/categoria/foto e confirme.
+5. Clique em **"Salvar no GitHub"** — isso grava tudo num commit. A vitrine pública atualiza em ~1 minuto.
 
-6. Pronto! O site estará em algo como `https://atelia-da-lua.vercel.app`. Acesse `/admin` para cadastrar os primeiros produtos.
+A senha fica salva só no navegador de quem configurou (localStorage) — nunca é enviada pro repositório.
 
-## Atualizando o site depois
+## Fotos dos produtos
 
-Sempre que quiser mudar alguma coisa no código, basta enviar (`git push`) pro GitHub — a Vercel publica a atualização sozinha automaticamente.
-
-Para o dia a dia (cadastrar produto, trocar foto, mudar preço), não precisa mexer no código: é tudo pelo painel `/admin`.
+Ao escolher uma foto no painel, ela é redimensionada automaticamente no navegador (pra caber no limite de
+tamanho da API do GitHub) e enviada como um arquivo dentro de `images/`. Ao trocar ou remover a foto de um
+produto, a foto antiga é apagada do repositório automaticamente.

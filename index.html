@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ateliê da Lua — Mimos que encantam ✨</title>
+<meta name="description" content="Peças artesanais feitas à mão pelo Ateliê da Lua. Escolha seu mimo e chame no WhatsApp!">
+<link rel="icon" type="image/jpg" href="favicon-lua.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <img src="logo.png" alt="Ateliê da Lua" class="brandmark">
+    <p class="eyebrow"><span>Ateliê da Lua</span><a class="badge-link" href="admin.html">Área do admin →</a></p>
+    <h1>Mimos que encantam ✨</h1>
+    <p class="sub">Gostou de alguma coisa? É só chamar no WhatsApp — sem cadastro, simples assim.</p>
+    <p class="updated-note" id="statusbar">Carregando...</p>
+  </div>
+
+  <div class="searchrow">
+    <input type="text" id="search" placeholder="O que seu coração procura hoje? ♡">
+  </div>
+
+  <div class="drawers" id="drawers"></div>
+
+  <div class="bulkrow">
+    <h2 id="sectionTitle">Todos os mimos</h2>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Feito com carinho pelo Ateliê da Lua 🌙</footer>
+</div>
+
+<a class="fab-whatsapp" id="fabWhatsapp" href="#" target="_blank" rel="noopener noreferrer" title="Fale conosco no WhatsApp" hidden>
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script src="shared.js"></script>
+<script>
+let produtos = [];
+let whatsappNumero = '';
+let activeCategory = null; // null = "Todos"
+let searchTerm = '';
+
+const drawersEl = document.getElementById('drawers');
+const gridEl = document.getElementById('grid');
+const sectionTitleEl = document.getElementById('sectionTitle');
+const statusbarEl = document.getElementById('statusbar');
+const fabWhatsapp = document.getElementById('fabWhatsapp');
+
+async function loadData(){
+  try{
+    const res = await fetch('./data.json?t=' + Date.now());
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const payload = await res.json();
+    produtos = payload.produtos || [];
+    whatsappNumero = (payload.config && payload.config.whatsappNumero) || '';
+    statusbarEl.textContent = payload.updatedAt ? ('Atualizado em ' + formatDateTime(payload.updatedAt)) : 'Vitrine pronta';
+    statusbarEl.classList.remove('error');
+    if(whatsappNumero){
+      fabWhatsapp.href = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent('Olá! Vi a vitrine do Ateliê da Lua e queria saber mais 🌙')}`;
+      fabWhatsapp.hidden = false;
+    }
+    render();
+  }catch(e){
+    statusbarEl.textContent = 'Não foi possível carregar os produtos. Tente recarregar a página.';
+    statusbarEl.classList.add('error');
+  }
+}
+
+function renderDrawers(){
+  const categoriasComItens = CATEGORIES.filter(cat => produtos.some(p => p.categoria === cat));
+  if(categoriasComItens.length < 2){ drawersEl.innerHTML = ''; return; }
+  const todosHTML = `<div class="drawer ${!activeCategory && !searchTerm ? 'active' : ''}" data-cat="" style="--cat-color:var(--outros);--cat-bg:var(--outros-bg);">
+    <span class="icon">✨</span><span class="name">Todos</span><span class="count">${produtos.length}</span>
+  </div>`;
+  const catsHTML = categoriasComItens.map(cat => {
+    const key = CAT_KEY[cat];
+    const count = produtos.filter(p => p.categoria === cat).length;
+    const active = (!searchTerm && activeCategory === cat) ? 'active' : '';
+    return `<div class="drawer ${active}" data-cat="${cat}" style="--cat-color:var(--${key});--cat-bg:var(--${key}-bg);">
+      <span class="icon">${ICONS[cat]}</span><span class="name">${cat}</span><span class="count">${count}</span>
+    </div>`;
+  }).join('');
+  drawersEl.innerHTML = todosHTML + catsHTML;
+  drawersEl.querySelectorAll('.drawer').forEach(el => {
+    el.addEventListener('click', () => {
+      activeCategory = el.dataset.cat || null;
+      searchTerm = '';
+      document.getElementById('search').value = '';
+      render();
+    });
+  });
+}
+
+function visibleProdutos(){
+  let list = produtos;
+  if(searchTerm){
+    const t = searchTerm.toLowerCase();
+    list = list.filter(p => p.nome.toLowerCase().includes(t));
+  } else if(activeCategory){
+    list = list.filter(p => p.categoria === activeCategory);
+  }
+  return list.slice().sort((a,b) => (b.destaque === a.destaque) ? 0 : (b.destaque ? 1 : -1));
+}
+
+function renderGrid(){
+  const list = visibleProdutos();
+  sectionTitleEl.textContent = searchTerm ? `Resultados para "${searchTerm}"` : (activeCategory || 'Todos os mimos');
+
+  if(!list.length){
+    gridEl.innerHTML = produtos.length
+      ? '<div class="empty"><div class="big">🎨</div>Nenhum mimo encontrado com esse filtro.</div>'
+      : '<div class="empty"><div class="big">🌙</div>Em breve novidades por aqui...</div>';
+    return;
+  }
+
+  gridEl.innerHTML = list.map(p => {
+    const key = CAT_KEY[p.categoria] || 'outros';
+    const thumbHTML = p.imagem
+      ? `<img class="thumb thumb-zoomable" src="${p.imagem}" alt="${p.nome}" loading="lazy">`
+      : `<div class="thumb-empty">🌙</div>`;
+    const precoHTML = p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '';
+    const destaqueHTML = p.destaque ? '<span class="badge-destaque">✨ Destaque</span>' : '';
+    const whatsappHref = whatsappNumero ? linkWhatsappProduto(whatsappNumero, p) : '#';
+    return `<div class="card" style="--cat-color:var(--${key});--cat-bg:var(--${key}-bg);">
+      ${destaqueHTML}
+      ${thumbHTML}
+      ${p.categoria ? `<span class="cat-tag">${p.categoria}</span>` : ''}
+      <p class="title">${p.nome}</p>
+      ${precoHTML}
+      <a class="btnline whatsapp block" href="${whatsappHref}" target="_blank" rel="noopener noreferrer">
+        Pedir no WhatsApp
+      </a>
+    </div>`;
+  }).join('');
+
+  gridEl.querySelectorAll('.thumb-zoomable').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.src, img.alt));
+  });
+}
+
+const lightboxEl = document.getElementById('lightbox');
+const lightboxImgEl = document.getElementById('lightboxImg');
+function openLightbox(src, alt){
+  lightboxImgEl.src = src;
+  lightboxImgEl.alt = alt || '';
+  lightboxEl.hidden = false;
+  requestAnimationFrame(() => lightboxEl.classList.add('show'));
+}
+function closeLightbox(){
+  lightboxEl.classList.remove('show');
+  setTimeout(() => { lightboxEl.hidden = true; lightboxImgEl.src = ''; }, 200);
+}
+lightboxEl.addEventListener('click', closeLightbox);
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+window.addEventListener('keydown', (e) => { if(e.key === 'Escape' && !lightboxEl.hidden) closeLightbox(); });
+
+function render(){
+  renderDrawers();
+  renderGrid();
+}
+
+document.getElementById('search').addEventListener('input', (e) => {
+  searchTerm = e.target.value.trim();
+  render();
+});
+
+loadData();
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>

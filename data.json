@@ -45,11 +45,11 @@
     },
     {
       "id": "p11",
-      "nome": "Manga Crochê Mingua",
-      "descricao": "manga para quem está com frio quentinho",
-      "preco": 70,
+      "nome": "Chaveiro de Coração de Fio em Malha",
+      "descricao": "Chaveiro de Flor em Fio de Malha 🌼🧶\n\nPeça artesanal delicada e exclusiva, confeccionada em fio de malha de alta qualidade, perfeita para dar um toque especial às suas chaves, bolsas ou para presentear alguém querido.\n\n✨ Detalhes do produto:\n\nProduzido manualmente com fio de malha.\n\nFormato de flor com acabamento sofisticado.\n\nAplicação de detalhe decorativo no centro da peça.\n\nArgola metálica resistente.\n\nLeve, durável e fácil de transportar.\n\nDisponível em diversas cores sob encomenda.\n\n\n🎁 Ideal para:\n\nLembrancinhas de aniversário e eventos.\n\nPresentes artesanais e personalizados.\n\nDecoração de bolsas e mochilas.\n\nBrindes especiais para clientes e amigos.\n\n\n💝 Produto 100% artesanal, feito com carinho e atenção a cada detalhe. Por ser confeccionado à mão, cada peça possui características únicas que a tornam ainda mais especial.",
+      "preco": 5,
       "categoria": "Crochê",
-      "imagem": "images/p11-manga-croche.jpg",
+      "imagem": "images/d037a650-fe2d-47d4-ba94-0ea087c8d3b2.jpg",
       "destaque": false,
       "criadoEm": "2026-05-30T02:40:24.000Z"
     },
@@ -84,5 +84,5 @@
       "criadoEm": "2026-05-30T02:40:24.000Z"
     }
   ],
-  "updatedAt": "2026-07-02T22:33:20.160Z"
+  "updatedAt": "2026-07-02T22:35:22.721Z"
 }

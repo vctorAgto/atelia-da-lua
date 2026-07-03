@@ -12,8 +12,8 @@
 </head>
 <body>
 
-<div class="side-deco" aria-hidden="true">
-  <svg class="side-cat" viewBox="0 0 60 46" fill="none">
+<div class="side-deco" id="sideDeco" aria-hidden="true">
+  <svg class="side-cat" id="sideCat" viewBox="0 0 60 46" fill="none">
     <path d="M4 44c-5-3-6-11 0-15" stroke="#8a7e8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M8 44c-1-11 7-19 19-19 10 0 17 6 18 14" stroke="#8a7e8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     <circle cx="42" cy="15" r="9" stroke="#8a7e8f" stroke-width="1.6"/>
@@ -204,6 +204,22 @@ function render(){
   renderDrawers();
   renderGrid();
 }
+
+const sideDecoEl = document.getElementById('sideDeco');
+const MIMOS = ['🐾','💕','✨','🧶','🌸'];
+sideDecoEl.addEventListener('click', (e) => {
+  sideDecoEl.classList.remove('animando');
+  void sideDecoEl.offsetWidth;
+  sideDecoEl.classList.add('animando');
+
+  const emoji = document.createElement('span');
+  emoji.className = 'mimo-flutuante';
+  emoji.textContent = MIMOS[Math.floor(Math.random() * MIMOS.length)];
+  emoji.style.left = (e.clientX - 10) + 'px';
+  emoji.style.top = (e.clientY - 10) + 'px';
+  document.body.appendChild(emoji);
+  setTimeout(() => emoji.remove(), 1200);
+});
 
 document.getElementById('search').addEventListener('input', (e) => {
   searchTerm = e.target.value.trim();

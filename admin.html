@@ -8,6 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  /* O painel admin não tem o enfeite lateral da vitrine, então não precisa
+     do espaço reservado nem da compensação de centralização — sem isso o
+     conteúdo saía cortado da tela. */
+  .wrap{padding-left:22px;}
+  .masthead{margin-left:0;margin-right:0;padding-left:0;padding-right:0;}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -116,11 +123,11 @@
         <div class="settings-full checkbox-row">
           <label class="checkbox-label">
             <input type="checkbox" id="niCombinar">
-            Preço a combinar (esconde o valor, mostra "Valor a combinar")
+            <span>Preço a combinar (esconde o valor, mostra "Valor a combinar")</span>
           </label>
           <label class="checkbox-label">
             <input type="checkbox" id="niDestaque">
-            Marcar como destaque ✨
+            <span>Marcar como destaque ✨</span>
           </label>
         </div>
         <div class="settings-full">

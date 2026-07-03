@@ -186,15 +186,18 @@ input[type=file]{border:none;padding:6px 0;}
 .newitem-panel{background:var(--paper);border:1.5px dashed var(--accent);border-radius:20px;padding:22px;margin-bottom:22px;box-shadow:var(--shadow);}
 .newitem-panel h3{font-size:1.08rem;margin-bottom:14px;}
 .newitem-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.newitem-grid > div{min-width:0;}
 .checkbox-row{display:flex;flex-direction:column;gap:10px;}
 .checkbox-label{
   display:flex;align-items:flex-start;gap:8px;font-size:.88rem;font-weight:500;
   color:var(--ink);cursor:pointer;margin:0;
 }
 .checkbox-label input[type=checkbox]{width:auto;flex-shrink:0;margin-top:3px;accent-color:var(--accent-dark);}
+.checkbox-label span{flex:1;min-width:0;}
 .req{color:#a83a3a;font-size:.68rem;font-weight:700;margin-left:4px;}
 .newitem-error{color:#a83a3a;font-size:.82rem;margin-top:10px;min-height:1.1em;}
 .preview-wrap{display:flex;align-items:center;gap:14px;}
+.preview-wrap input[type=file]{min-width:0;flex:1;max-width:100%;font-size:.82rem;}
 .preview-img{width:84px;height:84px;border-radius:16px;object-fit:cover;background:var(--outros-bg);flex-shrink:0;}
 .preview-empty{width:84px;height:84px;border-radius:16px;background:var(--outros-bg);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
 

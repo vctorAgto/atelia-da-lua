@@ -29,22 +29,33 @@ body{
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
 .wrap{max-width:1140px;margin:0 auto;padding:36px 22px 90px;}
 
-/* Enfeite fixo do lado esquerdo: gatinho brincando com o novelo de lã */
+/* Enfeite com gatinho brincando com o novelo de lã — pequeno e no topo no
+   celular (rola junto com a página, sem cobrir os produtos), vira fixo do
+   lado esquerdo da tela toda em telas largas. */
 .side-deco{
-  position:fixed;left:22px;top:0;height:100vh;width:60px;z-index:5;
-  display:none;flex-direction:column;align-items:center;justify-content:center;
+  position:absolute;left:6px;top:8px;width:34px;z-index:5;
+  display:flex;flex-direction:column;align-items:center;
   pointer-events:none;
 }
-.side-cat{width:58px;color:#8a7e8f;transform:translateX(6px);animation:cat-balancar 4.5s ease-in-out infinite;transform-origin:bottom center;}
-.side-ball{width:34px;margin-top:-4px;animation:balancar 5s ease-in-out infinite;transform-origin:top center;}
-.side-thread{width:34px;height:80px;}
+.side-cat{width:32px;color:#8a7e8f;transform:translateX(3px);animation:cat-balancar 4.5s ease-in-out infinite;transform-origin:bottom center;}
+.side-ball{width:20px;margin-top:-2px;animation:balancar 5s ease-in-out infinite;transform-origin:top center;}
+.side-thread{width:20px;height:34px;}
 .side-thread path{stroke-dasharray:150;animation:fluir 3.6s linear infinite;}
 @keyframes cat-balancar{
-  0%,100%{transform:translateX(6px) rotate(-2deg);}
-  50%{transform:translateX(6px) rotate(2deg);}
+  0%,100%{transform:translateX(3px) rotate(-2deg);}
+  50%{transform:translateX(3px) rotate(2deg);}
+}
+@media (min-width:640px){
+  .side-deco{left:14px;top:14px;width:44px;}
+  .side-cat{width:40px;transform:translateX(4px);}
+  .side-ball{width:26px;}
+  .side-thread{width:26px;height:50px;}
 }
 @media (min-width:1300px){
-  .side-deco{display:flex;}
+  .side-deco{position:fixed;left:22px;top:0;height:100vh;width:60px;justify-content:center;}
+  .side-cat{width:58px;transform:translateX(6px);}
+  .side-ball{width:34px;margin-top:-4px;}
+  .side-thread{width:34px;height:80px;}
 }
 @media (prefers-reduced-motion: reduce){
   .side-cat,.side-ball,.side-thread path{animation:none;}

@@ -29,6 +29,27 @@ body{
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
 .wrap{max-width:1140px;margin:0 auto;padding:36px 22px 90px;}
 
+/* Enfeite fixo do lado esquerdo: gatinho brincando com o novelo de lã */
+.side-deco{
+  position:fixed;left:22px;top:0;height:100vh;width:60px;z-index:5;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.side-cat{width:58px;color:#8a7e8f;transform:translateX(6px);animation:cat-balancar 4.5s ease-in-out infinite;transform-origin:bottom center;}
+.side-ball{width:34px;margin-top:-4px;animation:balancar 5s ease-in-out infinite;transform-origin:top center;}
+.side-thread{width:34px;height:80px;}
+.side-thread path{stroke-dasharray:150;animation:fluir 3.6s linear infinite;}
+@keyframes cat-balancar{
+  0%,100%{transform:translateX(6px) rotate(-2deg);}
+  50%{transform:translateX(6px) rotate(2deg);}
+}
+@media (min-width:1300px){
+  .side-deco{display:flex;}
+}
+@media (prefers-reduced-motion: reduce){
+  .side-cat,.side-ball,.side-thread path{animation:none;}
+}
+
 /* Cabeçalho compacto fixo, aparece ao rolar a página */
 .mini-header{
   position:fixed;top:0;left:0;right:0;z-index:800;height:0;overflow:hidden;
@@ -61,10 +82,6 @@ h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
 .updated-note{display:flex;align-items:center;justify-content:center;gap:7px;color:var(--ink-soft);font-size:.78rem;margin:12px 0 0;}
 .updated-note::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--decoracao);flex-shrink:0;}
 
-/* Novelinho de lã pendurado com fio ondulado, balançando devagar */
-.stitch-divider{display:flex;justify-content:center;margin:4px 0 18px;}
-.stitch-dangle{width:52px;height:150px;transform-origin:20px 21px;animation:balancar 5s ease-in-out infinite;}
-.stitch-thread{stroke-dasharray:118;animation:fluir 3.6s linear infinite;}
 @keyframes balancar{
   0%,100%{transform:rotate(-4deg);}
   50%{transform:rotate(4deg);}
@@ -72,10 +89,6 @@ h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
 @keyframes fluir{
   0%{stroke-dashoffset:0;}
   100%{stroke-dashoffset:-24;}
-}
-@media (prefers-reduced-motion: reduce){
-  .stitch-dangle{animation:none;}
-  .stitch-thread{animation:none;}
 }
 .updated-note.error{color:#a83a3a;}
 .updated-note.error::before{background:#a83a3a;}
@@ -236,7 +249,6 @@ footer a{color:var(--ink-soft);}
   .masthead{margin-bottom:16px;}
   .masthead h1{font-size:1.5rem;margin-bottom:6px;}
   .brandmark{width:88px;height:88px;margin-bottom:10px;}
-  .stitch-divider{height:20px;margin:2px 0 16px;}
   .sub{font-size:.86rem;}
   .updated-note{font-size:.7rem;margin-top:8px;}
   .searchrow{margin:14px 0;}

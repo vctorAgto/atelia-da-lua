@@ -74,8 +74,18 @@ h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
 .mini-brandmark{width:32px;height:32px;border-radius:50%;object-fit:cover;}
 .mini-header span{font-family:'Fraunces',serif;font-weight:600;color:var(--ink);font-size:1rem;}
 
-/* Masthead */
-.masthead{text-align:center;margin-bottom:26px;}
+/* Masthead — centralizado na tela de verdade, ignorando a margem reservada
+   pro enfeite lateral (que só precisa de espaço mais perto dos produtos).
+   Cancela o padding assimétrico do .wrap (que muda por breakpoint) e aplica
+   um padding simétrico próprio. */
+.masthead{
+  text-align:center;margin-bottom:26px;
+  margin-left:-78px;margin-right:-22px;
+  padding-left:20px;padding-right:20px;box-sizing:border-box;
+}
+@media (min-width:1300px){
+  .masthead{margin-left:-32px;}
+}
 .brandmark{
   width:118px;height:118px;border-radius:50%;object-fit:cover;
   box-shadow:var(--shadow);border:4px solid var(--paper);margin-bottom:16px;
@@ -259,7 +269,7 @@ footer a{color:var(--ink-soft);}
 }
 @media (max-width:520px){
   .wrap{padding:20px 14px 70px 60px;}
-  .masthead{margin-bottom:16px;}
+  .masthead{margin-bottom:16px;margin-left:-60px;margin-right:-14px;}
   .masthead h1{font-size:1.5rem;margin-bottom:6px;}
   .brandmark{width:88px;height:88px;margin-bottom:10px;}
   .sub{font-size:.86rem;}

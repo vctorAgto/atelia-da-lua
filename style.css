@@ -37,8 +37,9 @@ h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
 .side-deco{
   position:fixed;left:4px;top:0;height:100vh;width:46px;z-index:5;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  pointer-events:auto;cursor:pointer;
+  pointer-events:none;
 }
+.side-deco svg{pointer-events:auto;cursor:pointer;}
 .side-cat{width:44px;color:#8a7e8f;transform:translateX(4px);animation:cat-balancar 3.6s ease-in-out infinite;transform-origin:bottom center;}
 .side-ball{width:28px;margin-top:-2px;animation:balancar 4s ease-in-out infinite;transform-origin:top center;}
 .side-thread{width:28px;height:260px;}

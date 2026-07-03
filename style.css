@@ -29,7 +29,7 @@ body{
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
 .wrap{max-width:1140px;margin:0 auto;padding:36px 22px 90px 78px;}
 @media (min-width:1300px){
-  .wrap{padding-left:130px;}
+  .wrap{padding-left:32px;}
 }
 
 /* Enfeite com gatinho brincando com o novelo de lã, fixo do lado esquerdo
@@ -54,7 +54,7 @@ h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;}
   .side-thread{width:34px;height:360px;}
 }
 @media (min-width:1300px){
-  .side-deco{left:24px;width:80px;}
+  .side-deco{left:max(24px, calc(50vw - 570px - 104px));width:80px;}
   .side-cat{width:76px;transform:translateX(8px);}
   .side-ball{width:44px;margin-top:-4px;}
   .side-thread{width:44px;height:520px;}

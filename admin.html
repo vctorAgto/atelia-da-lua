@@ -26,11 +26,11 @@
     <div class="login-fields">
       <div>
         <label>Seu nome</label>
-        <input type="text" id="cfgName" placeholder="ex: Ana" autocomplete="off">
+        <input type="text" id="cfgName" name="editor_apelido" placeholder="ex: Ana" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true">
       </div>
       <div>
         <label>Senha de acesso</label>
-        <input type="password" id="cfgToken" placeholder="senha compartilhada do painel" autocomplete="off">
+        <input type="password" id="cfgToken" name="editor_chave" placeholder="senha compartilhada do painel" autocomplete="off" data-lpignore="true">
       </div>
     </div>
     <div class="newitem-error" id="loginError"></div>
@@ -103,7 +103,7 @@
       <div class="newitem-grid">
         <div>
           <label>Nome<span class="req">obrigatório</span></label>
-          <input type="text" id="niNome" placeholder="ex: Chaveiro de crochê lua" autocomplete="off">
+          <input type="text" id="niNome" name="produto_titulo" placeholder="ex: Chaveiro de crochê lua" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true">
         </div>
         <div>
           <label>Categoria</label>

@@ -125,7 +125,9 @@ function renderGrid(){
     const precoHTML = p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '<span></span>';
     const destaqueHTML = p.destaque ? '<span class="badge-destaque">✨</span>' : '';
     const whatsappHref = whatsappNumero ? linkWhatsappProduto(whatsappNumero, p) : '#';
-    const descricaoHTML = p.descricao ? `<p class="descricao">${p.descricao}</p>` : '';
+    const descricaoHTML = p.descricao
+      ? `<p class="descricao">${p.descricao}</p>${p.descricao.length > 60 ? '<button class="ver-mais" type="button">ver mais</button>' : ''}`
+      : '';
     return `<div class="card">
       ${destaqueHTML}
       ${thumbHTML}
@@ -143,6 +145,14 @@ function renderGrid(){
 
   gridEl.querySelectorAll('.thumb-zoomable').forEach(img => {
     img.addEventListener('click', () => openLightbox(img.src, img.alt));
+  });
+
+  gridEl.querySelectorAll('.ver-mais').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const descricao = btn.previousElementSibling;
+      const expandido = descricao.classList.toggle('expandido');
+      btn.textContent = expandido ? 'ver menos' : 'ver mais';
+    });
   });
 }
 

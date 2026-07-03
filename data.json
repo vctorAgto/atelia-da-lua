@@ -11,7 +11,8 @@
       "categoria": "Crochê",
       "imagem": "images/6980d8d1-a725-4903-8749-519db7363d4a.jpg",
       "destaque": false,
-      "criadoEm": "2026-05-30T02:40:24.000Z"
+      "criadoEm": "2026-05-30T02:40:24.000Z",
+      "precoCombinar": true
     },
     {
       "id": "p7",
@@ -84,5 +85,5 @@
       "criadoEm": "2026-05-30T02:40:24.000Z"
     }
   ],
-  "updatedAt": "2026-07-03T01:16:50.173Z"
+  "updatedAt": "2026-07-03T17:39:10.717Z"
 }

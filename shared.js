@@ -74,7 +74,9 @@ function resizeImageToJpegBase64(file, maxDim = 1280, quality = 0.82) {
 }
 
 function linkWhatsappProduto(numero, produto) {
-  const preco = produto.preco ? ` - ${formatPreco(produto.preco)}` : '';
+  const preco = produto.precoCombinar
+    ? ' - valor a combinar'
+    : (produto.preco ? ` - ${formatPreco(produto.preco)}` : '');
   const msg = `Olá! Tenho interesse neste mimo: *${produto.nome}*${preco}\n\nAinda está disponível?`;
   return `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
 }

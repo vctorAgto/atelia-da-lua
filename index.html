@@ -148,7 +148,9 @@ function renderGrid(){
     const thumbHTML = p.imagem
       ? `<img class="thumb thumb-zoomable" src="${p.imagem}" alt="${p.nome}" loading="lazy">`
       : `<div class="thumb-empty">🌙</div>`;
-    const precoHTML = p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '<span></span>';
+    const precoHTML = p.precoCombinar
+      ? '<span class="preco preco-combinar">Valor a combinar</span>'
+      : (p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '<span></span>');
     const destaqueHTML = p.destaque ? '<span class="badge-destaque">✨</span>' : '';
     const whatsappHref = whatsappNumero ? linkWhatsappProduto(whatsappNumero, p) : '#';
     const descricaoHTML = p.descricao

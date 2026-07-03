@@ -227,6 +227,7 @@ input[type=file]{border:none;padding:6px 0;}
 .card .ver-mais:hover{text-decoration:underline;}
 .card-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .card .preco{font-size:1.08rem;font-weight:700;}
+.card .preco.preco-combinar{font-size:.92rem;font-weight:600;font-style:italic;color:var(--ink-soft);}
 .whatsapp-pill{
   flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:6px;
   background:var(--whatsapp);color:#fff;width:44px;height:44px;border-radius:50%;

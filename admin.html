@@ -112,6 +112,10 @@
         <div>
           <label>Preço (R$)</label>
           <input type="number" id="niPreco" min="0" step="0.01" placeholder="0.00">
+          <label style="margin-top:8px;font-weight:500;">
+            <input type="checkbox" id="niCombinar" style="width:auto;display:inline-block;margin-right:6px;">
+            Preço a combinar (esconde o valor, mostra "Valor a combinar")
+          </label>
         </div>
         <div>
           <label style="margin-top:26px;">
@@ -212,6 +216,7 @@ const els = {
   niDescricao: document.getElementById('niDescricao'),
   niCat: document.getElementById('niCat'),
   niPreco: document.getElementById('niPreco'),
+  niCombinar: document.getElementById('niCombinar'),
   niDestaque: document.getElementById('niDestaque'),
   niImagem: document.getElementById('niImagem'),
   niPreviewWrap: document.getElementById('niPreviewWrap'),
@@ -500,7 +505,9 @@ function renderGrid(){
     const thumbHTML = p.imagem
       ? `<img class="thumb" src="${p.imagem}" alt="${p.nome}" loading="lazy">`
       : `<div class="thumb-empty">🌙</div>`;
-    const precoHTML = p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '';
+    const precoHTML = p.precoCombinar
+      ? '<span class="preco preco-combinar">Valor a combinar</span>'
+      : (p.preco ? `<span class="preco">${formatPreco(p.preco)}</span>` : '');
     const destaqueHTML = p.destaque ? '<span class="badge-destaque">✨ Destaque</span>' : '';
     return `<div class="card" style="--cat-color:var(--${key});--cat-bg:var(--${key}-bg);">
       <button class="editbtn" data-idx="${idx}">Editar</button>
@@ -564,6 +571,7 @@ function openNewItemPanel(){
   els.niDescricao.value = '';
   els.niCat.value = activeCategory || CATEGORIES[0];
   els.niPreco.value = '';
+  els.niCombinar.checked = false;
   els.niDestaque.checked = false;
   els.niError.textContent = '';
   resetImagePicker(null);
@@ -582,6 +590,7 @@ function openEditPanel(idx){
   els.niDescricao.value = p.descricao || '';
   els.niCat.value = p.categoria || CATEGORIES[0];
   els.niPreco.value = p.preco || '';
+  els.niCombinar.checked = !!p.precoCombinar;
   els.niDestaque.checked = !!p.destaque;
   els.niError.textContent = '';
   resetImagePicker(p.imagem);
@@ -614,6 +623,7 @@ els.btnNewItemConfirm.addEventListener('click', async () => {
   const descricao = els.niDescricao.value.trim();
   const categoria = els.niCat.value;
   const preco = Math.max(0, parseFloat(els.niPreco.value) || 0);
+  const precoCombinar = els.niCombinar.checked;
   const destaque = els.niDestaque.checked;
 
   if(!nome){
@@ -637,10 +647,10 @@ els.btnNewItemConfirm.addEventListener('click', async () => {
     }
 
     if(editingIndex === null){
-      produtos.push({ id: crypto.randomUUID(), nome, descricao, categoria, preco, destaque, imagem, criadoEm: new Date().toISOString() });
+      produtos.push({ id: crypto.randomUUID(), nome, descricao, categoria, preco, precoCombinar, destaque, imagem, criadoEm: new Date().toISOString() });
     }else{
       const p = produtos[editingIndex];
-      p.nome = nome; p.descricao = descricao; p.categoria = categoria; p.preco = preco; p.destaque = destaque; p.imagem = imagem;
+      p.nome = nome; p.descricao = descricao; p.categoria = categoria; p.preco = preco; p.precoCombinar = precoCombinar; p.destaque = destaque; p.imagem = imagem;
     }
 
     activeCategory = categoria;
